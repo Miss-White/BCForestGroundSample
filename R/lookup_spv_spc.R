@@ -1,0 +1,27 @@
+lookup_spv_spc <- function(){
+  lookuptable <- data.table::data.table(SP_VEGI = c("A", "AC", "ACB", "ACT", "AD", "AH", "AT", "AX", 
+                                                    "B", "BA", "BB", "BC", "BG", "BL", "BM", "BP", "C", "CI", "CP", 
+                                                    "CW", "CY", "D", "DG", "DM", "DR", "DS", "E", "EA", "EB", "EE", 
+                                                    "EP", "ES", "EW", "EXP", "EY", "F", "FD", "FDC", "FDI", "G", 
+                                                    "GP", "H", "HM", "HW", "HXM", "IG", "IS", "J", "JR", "K", "KC", 
+                                                    "L", "LA", "LD", "LE", "LT", "LW", "M", "MB", "ME", "MN", "MR", 
+                                                    "MS", "MV", "OA", "OB", "OC", "OD", "OE", "OF", "OG", "OH", "OI", 
+                                                    "P", "PA", "PF", "PJ", "PL", "PLC", "PLI", "PM", "PR", "PS", 
+                                                    "PW", "PXJ", "PY", "Q", "QE", "QG", "QW", "R", "RA", "S", "SA", 
+                                                    "SB", "SE", "SN", "SS", "SW", "SX", "SXB", "SXE", "SXL", "SXS", 
+                                                    "SXW", "SXX", "T", "TW", "U", "UA", "UP", "V", "VB", "VP", "VS", 
+                                                    "VV", "W", "WA", "WB", "WD", "WP", "WS", "WT", "X", "XC", "XH", 
+                                                    "Y", "YC", "YP", "Z", "ZC", "ZH"),
+                                        SP_COST = c("AC", "AC", "AC", "AC", "AC", "AC", "AC", "AC", "B", 
+                                                    "B", "B", "B", "B", "B", "B", "B", "C", "C", "Y", "C", "Y", "D", 
+                                                    "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", 
+                                                    "F", "F", "F", "F", "D", "D", "H", "H", "H", "H", "C", "C", "C", 
+                                                    "C", "D", "D", "F", "F", "F", "F", "F", "F", "M", "M", "M", "M", 
+                                                    "M", "M", "M", "C", "C", "C", "D", "D", "D", "D", "D", "D", "P", 
+                                                    "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "D", 
+                                                    "D", "D", "D", "D", "D", "S", "S", "S", "S", "S", "S", "S", "S", 
+                                                    "S", "S", "S", "S", "S", "S", "Y", "Y", "D", "D", "D", "D", "D", 
+                                                    "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "B", "B", "D", 
+                                                    "Y", "Y", "Y", "B", "B", "AC"))
+  return(lookuptable)
+}

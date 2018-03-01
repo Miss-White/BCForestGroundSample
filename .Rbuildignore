@@ -1,2 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^LICENSE$
+^documents$
+CONTRIBUTING.md
+^README\.Rmd$
+^CODE_OF_CONDUCT\.md$
