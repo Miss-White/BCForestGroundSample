@@ -1,8 +1,8 @@
 Package: BCForestGroundSample
 Type: Package
 Title: BC forest ground sample compilation
-Version: 1.0
-Date: 2018-01-30
+Version: 2.0
+Date: 2018-03-02
 Author: Yong Luo, Rene De Jong and Province of British Columbia
 Maintainer: Yong Luo <yong.luo@gov.bc.ca> 
 Description: The package provides functions for compiling forest ground sample data in BC.
