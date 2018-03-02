@@ -22,7 +22,7 @@ BEC-based (\code{KBEC}) and FIZ-based (\code{KFIZ}).}
 \item{walkThru}{logical, Speciefies whether the data had been collected using work through method. Default is \code{TRUE},
 if it is not specified.}
 
-\item{logMinLength}{numeric, Specifies minimum length of log when doing log length adjustment, 
+\item{logMinLength}{numeric, Specifies minimum length of log when doing log length adjustment,
 see \code{\link{logMatrixAdjustment}} for details. If missing 0.1 is used.}
 
 \item{stumpHeight}{numeric, Stump height. If missing 0.3 is used.}
@@ -38,17 +38,17 @@ Default is \code{no}, if missing. Otherwise, a number should be provided.}
 
 \item{siteToolsDLLPath}{character, Path to SINDEX33.DLL.}
 
-\item{sasExePath}{character, Path to sas executable, i.e., sas.exe. If missing, 
-the function takes \code{C:/Program Files/SASHome/x86/SASFoundation/9.3 as default}. 
+\item{sasExePath}{character, Path to sas executable, i.e., sas.exe. If missing,
+the function takes \code{C:/Program Files/SASHome/x86/SASFoundation/9.3 as default}.
 However, it will cause crush if sas executable is not located in default path.}
 }
 \value{
 This function compiles data and save outputs in \code{outputPath} and no file is returned.
 }
 \description{
-This function compiles VRI data by calling specific VRI functions. Unlike the original 
+This function compiles VRI data by calling specific VRI functions. Unlike the original
              compiler (i.e., SAS compiler), the R version compiler hardcodes all the lookup tables in
-             the compilation process. Please refer the descriptions for lookup table to see whether 
+             the compilation process. Please refer the descriptions for lookup table to see whether
              they are same as the original lookup table.
 }
 \references{
