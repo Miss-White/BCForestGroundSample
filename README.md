@@ -6,8 +6,26 @@ Package Status
 
 This package is still under development.
 
-Development History and Improvements
-------------------------------------
+Development History and Features
+--------------------------------
+
+### version 1
+
+**Date**: To March 1st, 2018
+
+**Features**:
+
+-   clarified the unnecessary process in SAS compiler
+-   implemented mid-point guess in height estimate for broken top trees
+-   added lorey's height estimate in height summary
+-   added tree flag for
+    -   full measured trees (DBH + Height + Call grading available)
+    -   enhanced trees in auxi plot (DBH + Height + Call grading available)
+    -   height enhanced trees (DBH + Height available)
+    -   non-enhanced trees (DBH available)
+-   outputed data for deriving regression and ratio
+-   hard-coded lookup tables (SAS compiler reads these tables)
+-   solved floating point issues (SAS compiler does not take account)
 
 Issue/Bug Reporting
 -------------------
@@ -17,14 +35,14 @@ Please file an [issue](https://github.com/bcgov/BCForestGroundSample/issues/), i
 Install package
 ---------------
 
-The package can be installed from github by using following codes:
+The package version 1 can be installed from github by using following codes:
 
 ``` r
 library(devtools)
-install_github("bcgov/BCForestGroundSample")
+install_github("bcgov/BCForestGroundSample", ref = "version1")
+# to check the package
+packageVersion("BCForestGroundSample")
 ```
-
-**Warning messages** may be showed up when you install the package. However, it should not affect outputs of each function. If you have any concerns about the package, please report your issue [here](https://github.com/bcgov/BCForestGroundSample/issues).
 
 Use package
 -----------
