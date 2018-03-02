@@ -19,10 +19,10 @@ Development History and Features
 -   implemented mid-point guess in height estimate for broken top trees
 -   added lorey's height estimate in height summary
 -   added tree flag for
--   full measured trees (DBH + Height + Call grading available)
--   enhanced trees in auxi plot (DBH + Height + Call grading available)
--   height enhanced trees (DBH + Height available)
--   non-enhanced trees (DBH available)
+    -   full measured trees (DBH + Height + Call grading available)
+    -   enhanced trees in auxi plot (DBH + Height + Call grading available)
+    -   height enhanced trees (DBH + Height available)
+    -   non-enhanced trees (DBH available)
 -   outputed data for deriving regression and ratio
 -   hard-coded lookup tables (SAS compiler reads these tables)
 
