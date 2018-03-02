@@ -1,19 +1,19 @@
 #' VRI compiler - VRI specific
-#' 
-#' 
-#' @description This function compiles VRI data by calling specific VRI functions. Unlike the original 
+#'
+#'
+#' @description This function compiles VRI data by calling specific VRI functions. Unlike the original
 #'              compiler (i.e., SAS compiler), the R version compiler hardcodes all the lookup tables in
-#'              the compilation process. Please refer the descriptions for lookup table to see whether 
+#'              the compilation process. Please refer the descriptions for lookup table to see whether
 #'              they are same as the original lookup table.
-#'              
+#'
 #' @param dataSourcePath character, Specifies the path that directs to the VRI original data soruce.
 #' @param outputPath character, Specifies the folder to save all the outputs.
 #' @param equation character, Specifies the taper equation that is used for compiler. Currently supports
 #'                            BEC-based (\code{KBEC}) and FIZ-based (\code{KFIZ}).
 #' @param walkThru logical, Speciefies whether the data had been collected using work through method. Default is \code{TRUE},
 #'                          if it is not specified.
-#' @param logMinLength numeric, Specifies minimum length of log when doing log length adjustment, 
-#'                              see \code{\link{logMatrixAdjustment}} for details. If missing 0.1 is used.                                                    
+#' @param logMinLength numeric, Specifies minimum length of log when doing log length adjustment,
+#'                              see \code{\link{logMatrixAdjustment}} for details. If missing 0.1 is used.
 #' @param stumpHeight numeric, Stump height. If missing 0.3 is used.
 #' @param breastHeight numeric, Breast height. If missing 1.3 is used.
 #' @param UTOPDIB numeric, Threshold inside-bark diameter for merchantable volume. If missing, UTOPDIB is 10.
@@ -21,17 +21,17 @@
 #' @param weirdUtil character, Specifies weird utilization in summarizing tree volumes at cluster and species level.
 #'                             Default is \code{no}, if missing. Otherwise, a number should be provided.
 #' @param siteToolsDLLPath character, Path to SINDEX33.DLL.
-#' @param sasExePath character, Path to sas executable, i.e., sas.exe. If missing, 
-#'                              the function takes \code{C:/Program Files/SASHome/x86/SASFoundation/9.3 as default}. 
-#'                              However, it will cause crush if sas executable is not located in default path.                                                         
-#'                                                                     
+#' @param sasExePath character, Path to sas executable, i.e., sas.exe. If missing,
+#'                              the function takes \code{C:/Program Files/SASHome/x86/SASFoundation/9.3 as default}.
+#'                              However, it will cause crush if sas executable is not located in default path.
+#'
 #' @return This function compiles data and save outputs in \code{outputPath} and no file is returned.
-#' 
+#'
 #' @importFrom data.table ':='
 #' @importFrom fpCompare '%<=%' '%==%' '%>=%' '%!=%' '%>>%' '%<<%'
 #' @importFrom haven read_sas
 #' @references VRI compiler manual
-#' 
+#'
 #' @export
 #' @docType methods
 #' @rdname VRICompiler
@@ -39,13 +39,13 @@
 #' @author Yong Luo
 #'
 
-VRICompiler <- function(dataSourcePath, 
-                        outputPath = ".", 
+VRICompiler <- function(dataSourcePath,
+                        outputPath = ".",
                         equation = "KBEC",
                         walkThru = TRUE,
                         logMinLength = 0.1,
                         stumpHeight = 0.3,
-                        breastHeight = 1.3, 
+                        breastHeight = 1.3,
                         UTOPDIB = 10,
                         utilLevel = 4,
                         weirdUtil = "No",
@@ -54,14 +54,14 @@ VRICompiler <- function(dataSourcePath,
   ### 1. setup output folder
   outputPath <- compilerOutputSetup(outputPath)
   compileLog <- appendedCat(paste("VRI compiler will save all outputs in ", outputPath, sep = ""))
-  
+
   ### 2. load all data for compilation
   ### 2.0 lookup table check
-  lookuptables <- c("vri_grp", "vri_bec", "spv_spc", "sp_cost", "spv_frd", "sp_type", 
+  lookuptables <- c("vri_grp", "vri_bec", "spv_spc", "sp_cost", "spv_frd", "sp_type",
                     "dcy_v3", "dcy_v3x", "brk_99", "wst_v3")
   for(inditable in lookuptables){
     indilog <- lookupCheck(inditable)
-    cat("\n\n", indilog, 
+    cat("\n\n", indilog,
         file = file.path(outputPath, "compilerLog.txt"), sep = "")
   }
   rm(lookuptables, indilog, inditable)
@@ -70,7 +70,7 @@ VRICompiler <- function(dataSourcePath,
                             compileLog)
   compileLog <- appendedCat("VRI compiler starts to load all the input data.",
                             compileLog)
-  cat(compileLog, 
+  cat(compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
   clusterplotheader_VRI <- VRIInit_clusterplot(dataSourcePath = dataSourcePath)
   samples <- data.table::copy(clusterplotheader_VRI$clusterPlotHeader)
@@ -78,11 +78,11 @@ VRICompiler <- function(dataSourcePath,
   if(haidaproj){
     samples <- samples[(PRJ_GRP == "Haida Gwaii" & PROJ_ID %in% c("0251", "0252", "025Y")),]
   }
-  
+
   compileLog <- appendedCat("Save cluster/plot information to samples.csv",
                             clusterplotheader_VRI$compilerLog)
   write.csv(samples, file.path(outputPath, "samples.csv"), row.names = FALSE)
-  cat("\n\n", compileLog, 
+  cat("\n\n", compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
   rm(clusterplotheader_VRI)
   ### 2.2 load vi_c data
@@ -90,42 +90,42 @@ VRICompiler <- function(dataSourcePath,
   ##                             2) enhanced trees in auxi plots (trees have dbh, height and call grading)
   ##                             3) H-enhanced trees in auxi plots (trees have dbh, height)
   ##                             4) B-sample trees in fixed area lidar projects (trees have dbh, height)
-  vi_c <- VRIInit_measuredTree(data.table::copy(samples), 
-                                           dataSourcePath, 
+  vi_c <- VRIInit_measuredTree(data.table::copy(samples),
+                                           dataSourcePath,
                                            walkThru)
   tree_ms1 <- vi_c$treeData
-  cat("\n\n", vi_c$compileLog, 
+  cat("\n\n", vi_c$compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
   rm(vi_c)
-  
+
   ### 2.3 load vi_d data
   ## vi_d contains call grading data for fully measured trees and enhanced trees
   vi_d <- VRIInit_lossFactor(fullMeasuredTrees = tree_ms1[,.(CLSTR_ID, PLOT, TREE_NO)],
                              dataSourcePath = dataSourcePath)
-  cat("\n\n", vi_d$compileLog, 
+  cat("\n\n", vi_d$compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
   vi_d <- vi_d$treeLossFactor
-  
+
   ### 2.4 load vi_i data
   ## vi_i has trees in auxi plots without height information (mostly), however, some of these trees are also in vi_c
   vi_i <- VRIInit_auxTree(data.table::copy(samples),
                                  dataSourcePath)
   tree_ax1 <- vi_i$auxiPlotTree
-  cat("\n\n",   vi_i$compileLog, 
+  cat("\n\n",   vi_i$compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
   rm(vi_i)
-  
+
   ### 2.5 load vi_h data
   ## vi_h data is the site age trees
   vi_h <- VRIInit_siteTree(data.table::copy(samples),
                                    dataSourcePath)
   tree_ah1 <- vi_h$siteTreeData
-  cat("\n\n", vi_h$compileLog, 
+  cat("\n\n", vi_h$compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
   rm(vi_h)
-  
-  
-  
+
+
+
   ### 3. vi_c compilation
   compileLog <- appendedCat(paste(rep("*", 60), collapse = ""))
   compileLog <- appendedCat("Start to compile vi_c.",
@@ -140,45 +140,46 @@ VRICompiler <- function(dataSourcePath,
   treemeasintensity[is.na(MEAS_INTENSE), MEAS_INTENSE := "ENHANCED"] ## fully measured trees
   tree_ms1 <- merge_dupUpdate(tree_ms1, treemeasintensity, by = c("CLSTR_ID", "PLOT", "TREE_NO"),
                               all.x = TRUE)
-  tree_ms1[is.na(MEAS_INTENSE), MEAS_INTENSE := "H-ENHANCED"]
+  tree_ms1[is.na(MEAS_INTENSE) | substr(TYPE_CD, 1, 1) == "B",
+           MEAS_INTENSE := "H-ENHANCED"]
   rm(treemeasintensity)
-  compileLog <- appendedCat(paste("   ", nrow(tree_ms1[MEAS_INTENSE == "FULL",]), 
-                                  " observations are fully measured trees in IPC", sep = ""),
+  compileLog <- appendedCat(paste("   ", nrow(tree_ms1[MEAS_INTENSE == "FULL",]),
+                                  " observations are fully measured trees", sep = ""),
                             compileLog)
-  compileLog <- appendedCat(paste("   ", nrow(tree_ms1[MEAS_INTENSE == "ENHANCED",]), 
+  compileLog <- appendedCat(paste("   ", nrow(tree_ms1[MEAS_INTENSE == "ENHANCED",]),
                                   " observations are enhanced trees in auxi plots", sep = ""),
                             compileLog)
-  compileLog <- appendedCat(paste("   ", nrow(tree_ms1[MEAS_INTENSE == "H-ENHANCED",]), 
-                                  " observations are height enhanced in auxi plots", sep = ""),
+  compileLog <- appendedCat(paste("   ", nrow(tree_ms1[MEAS_INTENSE == "H-ENHANCED",]),
+                                  " observations are height enhanced trees", sep = ""),
                             compileLog)
-  cat("\n\n", compileLog, 
+  cat("\n\n", compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
-  tree_ms6 <- VRIVolTree(treeData = data.table::copy(tree_ms1), 
+  tree_ms6 <- VRIVolTree(treeData = data.table::copy(tree_ms1),
                          equation = equation, logMinLength = logMinLength,
                          stumpHeight = stumpHeight, breastHeight = breastHeight, UTOPDIB = UTOPDIB)
-  cat("\n\n",   tree_ms6$compileLog, 
+  cat("\n\n",   tree_ms6$compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
   tree_ms6 <- tree_ms6$treeData
   rm(tree_ms1)
 
-  
+
   ######################
   ###################### start the site age compilation
   ### 4. vi_h site age compilation
   compileLog <- appendedCat(paste(rep("*", 60), collapse = ""))
-  cat("\n\n",   compileLog, 
+  cat("\n\n",   compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
   tree_ah1 <- merge_dupUpdate(tree_ah1, samples[,.(CLSTR_ID, PLOT, BGC_ZONE)],
                               by = c("CLSTR_ID", "PLOT"), all.x = TRUE)
-  tree_ah2 <- siteAgeCompiler(siteAgeData = data.table::copy(tree_ah1), 
+  tree_ah2 <- siteAgeCompiler(siteAgeData = data.table::copy(tree_ah1),
                               siteToolsDLLPath = siteToolsDLLPath,
                               sasExePath = sasExePath)
   rm(tree_ah1)
   compileLog <- appendedCat("Save compiled site age data to compiled_vi_h.csv.",
                             tree_ah2$compileLog)
   write.csv(tree_ah2$compiledData, file.path(outputPath, "compiled_vi_h.csv"), row.names = FALSE)
-  
-  siteAgeSummaries <- siteAgeSummary(tree_ah2$compiledData, 
+
+  siteAgeSummaries <- siteAgeSummary(tree_ah2$compiledData,
                                      siteToolsDLLPath, sasExePath)
   compileLog <- appendedCat("Summaried compiled site age data at cluster and cluster/species level.",
                             compileLog)
@@ -189,44 +190,44 @@ VRICompiler <- function(dataSourcePath,
   compileLog <- appendedCat("   Save site age summaries at cluster/species level to Smries_siteAge_byCLSP.csv.",
                             compileLog)
   write.csv(siteAgeSummaries$spc_ah, file.path(outputPath, "Smries_siteAge_byCLSP.csv"), row.names = FALSE)
-  cat("\n", compileLog, 
+  cat("\n", compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE)
   rm(siteAgeSummaries, tree_ah2)
 
   ######################
-  ###################### 
+  ######################
   ### 5. start the decay, waste and breakage calculation for full/enhanced trees in vi_c
   compileLog <- appendedCat(paste(rep("*", 60), collapse = ""))
-  cat("\n\n",   compileLog, 
+  cat("\n\n",   compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
   siteAgeTable <- merge_dupUpdate(cl_ah[,.(CLSTR_ID, AT_M_TLS, AT_M_TXO)],
-                                  unique(samples[,.(CLSTR_ID, PROJ_ID, SAMP_NO, TYPE_CD)], 
+                                  unique(samples[,.(CLSTR_ID, PROJ_ID, SAMP_NO, TYPE_CD)],
                                          by = "CLSTR_ID"),
                                   by = "CLSTR_ID",
                                   all.x = TRUE)
   tree_ms6 <- merge_dupUpdate(tree_ms6,
-                              unique(samples[,.(CLSTR_ID, PROJ_ID, BGC_ZONE, BGC_SBZN, BGC_VAR, 
-                                                TSA, TYPE_CD)], 
+                              unique(samples[,.(CLSTR_ID, PROJ_ID, BGC_ZONE, BGC_SBZN, BGC_VAR,
+                                                TSA, TYPE_CD)],
                                      by = "CLSTR_ID"),
                               by = "CLSTR_ID",
                               all.x = TRUE)
-  tree_ms7 <- DWBCompiler(treeMS = tree_ms6, siteAge = siteAgeTable, 
+  tree_ms7 <- DWBCompiler(treeMS = tree_ms6, siteAge = siteAgeTable,
                           treeLossFactors = vi_d, equation = "KBEC")
   compileLog <- appendedCat("Save compiled fully-measured trees: compilted_vi_c.csv",
                             tree_ms7$compileLog)
   write.csv(tree_ms7$treeMS, file.path(outputPath, "compiled_vi_c.csv"), row.names = FALSE)
-  cat("\n\n", compileLog, 
+  cat("\n\n", compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
   tree_ms7 <- tree_ms7$treeMS
   rm(vi_d, siteAgeTable, tree_ms6)
-  
 
-  
+
+
   #######
   ### 6. start to calculate tree volume components for H-enhanced and non-enhanced trees in auxi plots
   # call vol_ha_2017 macro
   compileLog <- appendedCat(paste(rep("*", 60), collapse = ""))
-  cat("\n\n",   compileLog, 
+  cat("\n\n",   compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
   auxtreecompilation <- auxiTreeCompiler(fullMeasuredTrees = data.table::copy(tree_ms7),
                                          auxiTrees = data.table::copy(tree_ax1),
@@ -234,11 +235,11 @@ VRICompiler <- function(dataSourcePath,
   rm(tree_ms7)
   compileLog <- appendedCat("Save regression table into output folder: regressiontable.csv.",
                             auxtreecompilation$compileLog)
-  write.csv(auxtreecompilation$regressionTable, 
+  write.csv(auxtreecompilation$regressionTable,
             file.path(outputPath, "regressiontable.csv"), row.names = FALSE)
   compileLog <- appendedCat("Save ratio table into output folder: ratiotable.csv.",
                             compileLog)
-  write.csv(auxtreecompilation$ratioTable, 
+  write.csv(auxtreecompilation$ratioTable,
             file.path(outputPath, "ratiotable.csv"), row.names = FALSE)
   compileLog <- appendedCat("Combine and save compiled trees for both enhanced and non-enhanced measurement to alltreeForVol_afterCP.csv.",
                             compileLog)
@@ -249,14 +250,14 @@ VRICompiler <- function(dataSourcePath,
   prep_smy[MEAS_INTENSE %in% c("FULL", "ENHANCED", "H-ENHANCED", "B-SAMPLE"), VOL_SRCE := "Calc"]
   prep_smy[is.na(VOL_SRCE), VOL_SRCE := "Unk"]
   prep_smy[, METHOD := NULL]
-  write.csv(prep_smy[order(CLSTR_ID, PLOT, TREE_NO),], 
+  write.csv(prep_smy[order(CLSTR_ID, PLOT, TREE_NO),],
             file.path(outputPath, "alltreeForVol_afterCP.csv"), row.names = FALSE)
   rm(auxtreecompilation)
-  
-  
+
+
   ## 7. sammarize and save compiled tree-level data at cluster and cluster/species level
   compileLog <- appendedCat(paste(rep("*", 60), collapse = ""))
-  cat("\n\n",   compileLog, 
+  cat("\n\n",   compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
   vrisummaries <- VRISummaries(allVolumeTrees = data.table::copy(prep_smy),
                                clusterPlotHeader = samples,
@@ -282,7 +283,7 @@ VRICompiler <- function(dataSourcePath,
                             compileLog)
   write.csv(vrisummaries$compositionsmry_byc, file.path(outputPath, "Smries_speciesComposition_byCL.csv"),
             row.names = FALSE)
-  cat("\n\n",   compileLog, 
+  cat("\n\n",   compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
 
 
@@ -345,7 +346,7 @@ VRICompiler <- function(dataSourcePath,
                             compileLog)
   vi_g <- haven::read_sas(file.path(dataSourcePath, "vi_g.sas7bdat")) %>% data.table
   names(vi_g) <- toupper(names(vi_g))
-  
+
   compileLog <- appendedCat("Select stump data that have cluster/plot header.",
                             compileLog)
   vi_g[, clusterplot := paste(CLSTR_ID, "_", PLOT, sep = "")]
@@ -354,9 +355,9 @@ VRICompiler <- function(dataSourcePath,
                             compileLog)
   compileLog <- appendedCat("Compile stump data.",
                             compileLog)
-  
+
   ## plot header for stump and small trees
-  stumpCompile <- stumpVolSmry(stumpData = vi_g, 
+  stumpCompile <- stumpVolSmry(stumpData = vi_g,
                                stumpPlotHeader = vi_e[PL_ORIG == "STUMP",])
   compileLog <- appendedCat("Save cluster-level stump summaries to Smries_stump_byCL.csv.",
                             compileLog)
@@ -366,7 +367,7 @@ VRICompiler <- function(dataSourcePath,
                             compileLog)
   write.csv(stumpCompile$stmp_cs,
             file.path(outputPath, "Smries_stump_byCLSP.csv"), row.names = FALSE)
-  cat("\n\n", compileLog, 
+  cat("\n\n", compileLog,
       file = file.path(outputPath, "compilerLog.txt"), append = TRUE, sep = "")
   #############################
   #### END OF VRI COMPILER
