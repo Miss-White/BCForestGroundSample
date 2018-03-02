@@ -51,6 +51,14 @@ This function compiles VRI data by calling specific VRI functions. Unlike the or
              the compilation process. Please refer the descriptions for lookup table to see whether
              they are same as the original lookup table.
 }
+\note{
+improvements include:
+ \enumerate{
+ \item specifies trees in B plots as height enhanced trees
+ \item removes the sas-dependent sindex functions
+ \item introduce the SIndexR package
+ }
+}
 \references{
 VRI compiler manual
 }

@@ -31,6 +31,13 @@
 #' @importFrom fpCompare '%<=%' '%==%' '%>=%' '%!=%' '%>>%' '%<<%'
 #' @importFrom haven read_sas
 #' @references VRI compiler manual
+#' @note
+#'  improvements include:
+#'  \enumerate{
+#'  \item specifies trees in B plots as height enhanced trees
+#'  \item removes the sas-dependent sindex functions
+#'  \item introduce the SIndexR package
+#'  }
 #'
 #' @export
 #' @docType methods
