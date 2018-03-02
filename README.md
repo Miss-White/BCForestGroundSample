@@ -25,6 +25,7 @@ Development History and Features
     -   non-enhanced trees (DBH available)
 -   outputed data for deriving regression and ratio
 -   hard-coded lookup tables (SAS compiler reads these tables)
+-   solved floating point issues (SAS compiler does not take account)
 
 ### version 2
 
