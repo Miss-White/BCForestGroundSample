@@ -18,6 +18,7 @@ Imports:
   foreign,
   fpCompare,
   rmarkdown,
-  sp
+  sp,
+  SIndexR
 Suggests:
   testthat
