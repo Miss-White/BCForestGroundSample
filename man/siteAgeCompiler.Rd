@@ -29,7 +29,7 @@ if sas executable is not located in default path.}
 A data table and a log file.
 }
 \description{
-This function takes site age tree data ie., \code{vi_h}, an output of \code{\link{VRIInit_siteTree}} to 
+This function takes site age tree data ie., \code{vi_h}, an output of \code{\link{VRIInit_siteTree}} to
              compute the breast height age, total age, and site index where possible. This function is
              equivalent to site_age.sas. The function heavily depends on site tools program.
 }
