@@ -1,27 +1,27 @@
 #' Convert UTM to other coordinate reference system.
-#' 
+#'
 #' @description Converts UTM coordinates to the other coordinate reference system.
-#' 
+#'
 #' @param point_ID character, Data point ID.
 #' @param zone  integer, UTM zone.
 #' @param northing integer, UTM northing.
-#' @param easting integer, UTM easting. 
+#' @param easting integer, UTM easting.
 #' @param CRS_To  character, Defines the spatial coordination reference that you wish to transform.
 #'        Default is BC Albers reference system.
 #' @param class character, Define the class of returned objective. Currently this function supports
-#'              either \code{table} or \code{sp} class. Default is \code{table}.                  
-#'                  
+#'              either \code{table} or \code{sp} class. Default is \code{table}.
+#'
 #' @return  Reprojected objective.
-#'                      
+#'
 #' @importFrom sp SpatialPoints spTransform CRS SpatialPointsDataFrame
 #' @importFrom data.table data.table
-#'
+#' @note this note is added by derek
 #' @export
 #' @docType methods
 #' @rdname UTM_Convertor
 #'
 #' @author Yong Luo
-setGeneric("UTM_Convertor", 
+setGeneric("UTM_Convertor",
            function(point_ID, zone, northing, easting, CRS_To, class) {
              standardGeneric("UTM_Convertor")
            })
@@ -58,7 +58,7 @@ setMethod(
                          Latitude = transformed$Latitude)]
       output <- rbindlist(list(output, outputAdded[,.(point_ID, Longitude, Latitude)]))
     }
-    
+
     if(class == "table"){
       return(output[,.(point_ID, Longitude, Latitude)])
     } else if (class == "sp"){
@@ -93,11 +93,11 @@ setMethod(
                 CRS_To = "missing",
                 class = "character"),
   definition = function(point_ID, zone, northing, easting, class) {
-    UTM_Convertor(point_ID, zone, northing, easting, 
+    UTM_Convertor(point_ID, zone, northing, easting,
                   CRS_To = "+proj=aea +lat_1=50 +lat_2=58.5 +lat_0=45 +lon_0=-126 +x_0=1000000
                   +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
                   class)
-  })    
+  })
 
 #' @export
 #' @rdname UTM_Convertor
@@ -110,10 +110,10 @@ setMethod(
                 CRS_To = "character",
                 class = "missing"),
   definition = function(point_ID, zone, northing, easting, CRS_To) {
-    UTM_Convertor(point_ID, zone, northing, easting, 
+    UTM_Convertor(point_ID, zone, northing, easting,
                   CRS_To,
                   class = "table")
-  }) 
+  })
 
 #' @export
 #' @rdname UTM_Convertor
@@ -126,11 +126,11 @@ setMethod(
                 CRS_To = "missing",
                 class = "missing"),
   definition = function(point_ID, zone, northing, easting) {
-    UTM_Convertor(point_ID, zone, northing, easting, 
+    UTM_Convertor(point_ID, zone, northing, easting,
                   CRS_To = "+proj=aea +lat_1=50 +lat_2=58.5 +lat_0=45 +lon_0=-126 +x_0=1000000
                   +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
                   class = "table")
-  }) 
+  })
 
 #' @export
 #' @rdname UTM_Convertor
@@ -144,11 +144,11 @@ setMethod(
                 class = "missing"),
   definition = function(zone, northing, easting) {
     UTM_Convertor(point_ID = as.character(1:length(zone)),
-                  zone, northing, easting, 
+                  zone, northing, easting,
                   CRS_To = "+proj=aea +lat_1=50 +lat_2=58.5 +lat_0=45 +lon_0=-126 +x_0=1000000
                   +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
                   class = "table")
-  }) 
+  })
 
 #' @export
 #' @rdname UTM_Convertor
@@ -162,10 +162,10 @@ setMethod(
                 class = "character"),
   definition = function(zone, northing, easting, class) {
     UTM_Convertor(point_ID = as.character(1:length(zone)),
-                  zone, northing, easting, 
+                  zone, northing, easting,
                   CRS_To = "+proj=aea +lat_1=50 +lat_2=58.5 +lat_0=45 +lon_0=-126 +x_0=1000000
                   +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
                   class)
-  }) 
+  })
 
 
