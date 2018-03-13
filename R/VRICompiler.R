@@ -32,13 +32,25 @@
 #' @importFrom haven read_sas
 #' @references VRI compiler manual
 #' @note
-#'  improvements include:
+#'  Improvements include:
 #'  \enumerate{
 #'  \item specifies trees in B plots as height enhanced trees
 #'  \item removes the sas-dependent sindex functions
 #'  \item introduce the SIndexR package
 #'  }
-#'
+#'  Currently, the compiler supports compilation for the below sample types:
+#'  \itemize{
+#'  \item{\code{Q: }} {Regular VRI sample with five point clusters design}
+#'  \item{\code{T: }} {??, sample protocol and sample design are same as Q samples}
+#'  \item{\code{B: }} {??, same plot layout as Q sample, with height is measured for all trees and
+#'  no call grading information}
+#'  \item{\code{M: }} {CMI sample, with all trees have call grading information in the field}
+#'  \item{\code{L: }} {LiDAR project, same plot layout and same design but without call grading information}
+#'  \item{\code{Y: }} {YSM plots, population between 15 and 50 years}
+#'  \item{\code{F: }} {NFI plots, trees measured all DBH, height and call grading}
+#'  \item{\code{N: }} {NVAF plots}
+#'  \item{\code{A: }} {VRI audit plots}
+#'  }
 #' @export
 #' @docType methods
 #' @rdname VRICompiler
